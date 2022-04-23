@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-class QueriesScreen extends StatefulWidget {
-  const QueriesScreen({Key? key}) : super(key: key);
+class TicketsScreen extends StatefulWidget {
+  const TicketsScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -12,7 +12,7 @@ class QueriesScreen extends StatefulWidget {
   }
 }
 
-class _QueriesState extends State<QueriesScreen> {
+class _QueriesState extends State<TicketsScreen> {
   TextEditingController _queryController = TextEditingController();
 
   @override

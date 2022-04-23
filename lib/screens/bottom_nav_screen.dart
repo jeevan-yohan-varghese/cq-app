@@ -1,5 +1,5 @@
 import 'package:cq_app/screens/ask_screen.dart';
-import 'package:cq_app/screens/queries_screen.dart';
+import 'package:cq_app/screens/tickets_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
@@ -15,7 +15,7 @@ class _BottomNavState extends State<BottomNavScreen> {
   int selectedIndex = 0;
   final List<Widget> _fragments = <Widget>[
     AskScreen(),
-    QueriesScreen(),
+    TicketsScreen(),
     AskScreen(),
   ];
 
@@ -53,7 +53,7 @@ class _BottomNavState extends State<BottomNavScreen> {
                       BottomNavigationBarItem(
                           icon: Icon(Icons.send), label: "Ask"),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.file_copy), label: "Queries"),
+                          icon: Icon(Icons.file_copy), label: "Tickets"),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.question_mark_rounded),
                           label: "FAQ"),
