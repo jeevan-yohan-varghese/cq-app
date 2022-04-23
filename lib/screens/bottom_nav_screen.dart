@@ -1,4 +1,5 @@
 import 'package:cq_app/screens/ask_screen.dart';
+import 'package:cq_app/screens/queries_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
@@ -14,7 +15,7 @@ class _BottomNavState extends State<BottomNavScreen> {
   int selectedIndex = 0;
   final List<Widget> _fragments = <Widget>[
     AskScreen(),
-    AskScreen(),
+    QueriesScreen(),
     AskScreen(),
   ];
 
