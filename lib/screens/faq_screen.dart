@@ -20,7 +20,7 @@ class _FaqState extends State<FaqScreen> {
             color: const Color(0xffB7C0F6),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Image.asset(
-                "images/plane_illus.png",
+                "images/faq_illus.png",
                 width: 150,
               ),
               const SizedBox(

@@ -1,4 +1,5 @@
 import 'package:cq_app/screens/ask_screen.dart';
+import 'package:cq_app/screens/faq_screen.dart';
 import 'package:cq_app/screens/tickets_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _BottomNavState extends State<BottomNavScreen> {
   final List<Widget> _fragments = <Widget>[
     AskScreen(),
     TicketsScreen(),
-    AskScreen(),
+    FaqScreen(),
   ];
 
   @override
