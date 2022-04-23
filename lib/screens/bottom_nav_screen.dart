@@ -1,5 +1,4 @@
 import 'package:cq_app/screens/ask_screen.dart';
-import 'package:cq_app/screens/faq_screen.dart';
 import 'package:cq_app/screens/tickets_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,7 @@ class _BottomNavState extends State<BottomNavScreen> {
   final List<Widget> _fragments = <Widget>[
     AskScreen(),
     TicketsScreen(),
-    FaqScreen(),
+    AskScreen(),
   ];
 
   @override
@@ -26,7 +25,16 @@ class _BottomNavState extends State<BottomNavScreen> {
         child: Scaffold(
             backgroundColor: Colors.white,
             resizeToAvoidBottomInset: false,
-            body: Center(
+            body: AnimatedSwitcher(
+              
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  child: child,
+                  opacity: animation,
+                );
+              },
+              duration: const Duration(milliseconds: 350),
+              
               child: _fragments[selectedIndex],
             ),
             bottomNavigationBar: Padding(
