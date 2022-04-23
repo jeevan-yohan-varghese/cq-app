@@ -34,15 +34,19 @@ class _AskState extends State<AskScreen> {
 
   /// Each time to start a speech recognition session
   void _startListening() async {
-    await _speechToText.listen(onResult: (result) {
-      _onSpeechResult(result);
-      setState(() {
-        listenText = "";
+    try {
+      await _speechToText.listen(onResult: (result) {
+        _onSpeechResult(result);
+        setState(() {
+          listenText = "";
+        });
       });
-    });
-    setState(() {
-      listenText = "Listening ...";
-    });
+      setState(() {
+        listenText = "Listening ...";
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Microphone permission required")));
+    }
   }
 
   /// Manually stop the active speech recognition session
@@ -66,8 +70,8 @@ class _AskState extends State<AskScreen> {
   }
 
   var parser = EmojiParser();
-var coffee = Emoji('coffee', '☕');
-var heart  = Emoji('heart', '❤️');
+  var coffee = Emoji('coffee', '☕');
+  var heart = Emoji('heart', '❤️');
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +105,7 @@ var heart  = Emoji('heart', '❤️');
                 const SizedBox(
                   height: 24,
                 ),
-                 Text("How can we help?${parser.get(':wave:').code}",
+                Text("How can we help?${parser.get(':wave:').code}",
                     style: TextStyle(
                         color: Color(0xff000000),
                         fontWeight: FontWeight.w700,
@@ -113,7 +117,9 @@ var heart  = Emoji('heart', '❤️');
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Color(0xff8b8b8b), fontSize: 16)),
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(
+                  height: 16,
+                ),
                 InkWell(
                   onTap: () {
                     _speechToText.isNotListening
@@ -135,15 +141,18 @@ var heart  = Emoji('heart', '❤️');
                     ),
                   ),
                 ),
-                
                 Visibility(
-                  visible: _speechToText.isListening,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical:8.0),
-                    child: Text(listenText,style: TextStyle(color: Color(0xff8B8B8B)),),
-                  )),
+                    visible: _speechToText.isListening,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        listenText,
+                        style: TextStyle(color: Color(0xff8B8B8B)),
+                      ),
+                    )),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0,right: 20.0,top:20.0),
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
                   child: TextFormField(
                     controller: _queryController,
                     minLines: 1,
@@ -156,10 +165,19 @@ var heart  = Emoji('heart', '❤️');
                           icon: Icon(Icons.send),
                         ),
                         hintText: "Your query here...",
-                        border: InputBorder.none),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.transparent))),
                   ),
                 ),
-                
               ],
             ),
           )),
