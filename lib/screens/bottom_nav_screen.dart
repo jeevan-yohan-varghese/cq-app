@@ -1,4 +1,3 @@
-
 import 'package:cq_app/screens/ask_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,37 +16,55 @@ class _BottomNavState extends State<BottomNavScreen> {
     AskScreen(),
     AskScreen(),
     AskScreen(),
-    
   ];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
             body: Center(
               child: _fragments[selectedIndex],
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              elevation: 5,
-              currentIndex: selectedIndex,
-              selectedItemColor: Theme.of(context).colorScheme.primary,
-              unselectedItemColor: const Color(0xff6a6a6a),
-              backgroundColor: const Color(0xfff3f3f4),
-              items: const [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.send), label: "Ask"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.file_copy),
-                    label: "Queries"),
-                BottomNavigationBarItem(icon: Icon(Icons.question_mark_rounded), label: "FAQ"),
-                
-              ],
-              onTap: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff677AF3).withOpacity(0.09),
+                      spreadRadius: 5,
+                      blurRadius: 25,
+                      offset: Offset(0, 8), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: BottomNavigationBar(
+                    elevation: 0,
+                    currentIndex: selectedIndex,
+                    selectedItemColor: Theme.of(context).colorScheme.primary,
+                    unselectedItemColor: const Color(0xff6a6a6a),
+                    backgroundColor: Color(0xffffffff),
+                    items: const [
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.send), label: "Ask"),
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.file_copy), label: "Queries"),
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.question_mark_rounded),
+                          label: "FAQ"),
+                    ],
+                    onTap: (index) {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                    },
+                  ),
+                ),
+              ),
             )));
   }
 }

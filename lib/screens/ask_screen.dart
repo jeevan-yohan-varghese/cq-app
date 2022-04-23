@@ -50,7 +50,9 @@ class _AskState extends State<AskScreen> {
   /// listen method.
   void _stopListening() async {
     await _speechToText.stop();
-    setState(() {});
+    setState(() {
+      listenText="";
+    });
   }
 
   /// This is the callback that the SpeechToText plugin calls when
@@ -66,6 +68,7 @@ class _AskState extends State<AskScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
                   children: [
@@ -82,11 +85,11 @@ class _AskState extends State<AskScreen> {
                       fontSize: 20),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 Image.asset(
                   "images/male_illus.png",
-                  width: 200,
+                  width: 250,
                 )
               ]),
             ),
@@ -133,18 +136,20 @@ class _AskState extends State<AskScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextFormField(
                 controller: _queryController,
-                minLines: 2,
+                minLines: 1,
                 maxLines: 5,
                 decoration: InputDecoration(
                     fillColor: const Color(0xffEFF3FF),
                     filled: true,
-                    label: Text("Query"), border: InputBorder.none),
+                    hintText: "Your query here...", border: InputBorder.none),
               ),
             ),
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(onPressed: () {}, child: const Text("SUBMIT"))
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(onPressed: () {}, icon: Icon(Icons.send)))
                   ],
                 ),
           )),
