@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:cq_app/data/helpers/new_complaint_response.dart';
+import 'package:cq_app/screens/login_screen.dart';
+import 'package:cq_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-
+import 'package:http/http.dart' as http;
 class AskScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -12,6 +18,7 @@ class AskScreen extends StatefulWidget {
 }
 
 class _AskState extends State<AskScreen> {
+  var _isLoggedIn = false;
   TextEditingController _queryController = TextEditingController();
 
   SpeechToText _speechToText = SpeechToText();
@@ -19,11 +26,21 @@ class _AskState extends State<AskScreen> {
   String _lastWords = '';
 
   String listenText = "";
+  String jwt="";
 
   @override
   void initState() {
     super.initState();
     _initSpeech();
+    SharedPreferences.getInstance().then((value) => {
+          setState(() {
+            _isLoggedIn = value.getBool("isLoggedIn") ?? false;
+            if(_isLoggedIn){
+              jwt=value.getString("jwtToken")??"";
+            }
+            debugPrint("##############################${_isLoggedIn}");
+          })
+        });
   }
 
   /// This has to happen only once per app
@@ -45,7 +62,8 @@ class _AskState extends State<AskScreen> {
         listenText = "Listening ...";
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Microphone permission required")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Microphone permission required")));
     }
   }
 
@@ -72,13 +90,18 @@ class _AskState extends State<AskScreen> {
   var parser = EmojiParser();
   var coffee = Emoji('coffee', '☕');
   var heart = Emoji('heart', '❤️');
+  
+
+  
 
   @override
   Widget build(BuildContext context) {
+    
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
+          body: !_isLoggedIn?LoginScreen(): SingleChildScrollView(
             child: Column(
               children: [
                 Container(
@@ -161,7 +184,13 @@ class _AskState extends State<AskScreen> {
                         fillColor: const Color(0xffEFF3FF),
                         filled: true,
                         suffixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            newComplaint(_queryController.text, jwt).then((res) => {
+                              if(res.success){
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ticket created")))
+                              }
+                            });
+                          },
                           icon: Icon(Icons.send),
                         ),
                         hintText: "Your query here...",
@@ -183,4 +212,33 @@ class _AskState extends State<AskScreen> {
           )),
     );
   }
+
+
+  Future<NewComplaintResponse> newComplaint(String query,String jwt) async {
+    //debugPrint("*********************Google ID token : $token ");
+    final response = await http.post(
+        Uri.parse('$BASE_URL/api/newComplaint?apiKey=$API_KEY'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":"Bearer $jwt"
+        },
+        body: jsonEncode(<String, String>{'query': query}));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      //debugPrint(response.body);
+      debugPrint(response.body);
+      return NewComplaintResponse.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 404) {
+      debugPrint("**************************************Error 404");
+      throw Exception("Not found");
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      debugPrint(response.body);
+      throw Exception('Failed to fetch');
+    }
+  }
 }
+

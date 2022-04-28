@@ -2,31 +2,42 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TicketCard extends StatelessWidget {
+  String ticketId;
+  String complaint;
+  String date;
+  List<String> tags;
+  TicketCard(
+      {Key? key,
+      required this.ticketId,
+      required this.complaint,
+      required this.date,
+      required this.tags})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Color(0xffF4F6FA)),
+          borderRadius: BorderRadius.circular(12), color: Color(0xffF4F6FA)),
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Ticket #1011",
-              style: TextStyle(fontWeight: FontWeight.w500),
+              "Ticket #$ticketId",
+              style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.grey),
             )),
         Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "I have an issue with my credit card.",
+              complaint,
               style: TextStyle(fontSize: 16),
             )),
         const SizedBox(
           height: 12,
         ),
-        Row(
+        tags.isNotEmpty?Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
@@ -34,11 +45,11 @@ class TicketCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             Text(
-              "finance, card, credit",
+              tags[0],
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             )
           ],
-        ),
+        ):Container(),
         const SizedBox(
           height: 20,
         ),
@@ -47,10 +58,10 @@ class TicketCard extends StatelessWidget {
           children: [
             Expanded(
                 child: Text(
-              "12.Apr.2022",
-              style: TextStyle(color: Color(0xff8b8b8b)),
+              date,
+              style: const TextStyle(color: Color(0xff8b8b8b)),
             )),
-            Align(alignment: Alignment.centerRight, child: Icon(Icons.east))
+            const Align(alignment: Alignment.centerRight, child: Icon(Icons.east))
           ],
         )
       ]),
